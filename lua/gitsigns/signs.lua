@@ -58,14 +58,50 @@ function M:add(bufnr, signs)
 
       local hls = self.hls[s.type]
 
-      local ok, err = pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, -1, {
-        id = s.lnum,
-        sign_text = config.signcolumn and text or '',
-        priority = config.sign_priority,
-        sign_hl_group = hls.hl,
-        number_hl_group = config.numhl and hls.numhl or nil,
-        line_hl_group = config.linehl and hls.linehl or nil,
-      })
+      local current_line_signs =
+        vim.fn.sign_getplaced('%', { group = 'gitsigns_signs_', lnum = s.lnum })
+      local should_not_add_staged_num_hl = #current_line_signs[1].signs ~= 0
+        and (
+          hls.numhl == 'GitSignsStagedDeleteNr'
+          or hls.numhl == 'GitSignsStagedChangeNr'
+          or hls.numhl == 'GitSignsStagedChangedeleteNr'
+          or hls.numhl == 'GitSignsStagedAddNr'
+        )
+
+      local ok, err
+      if
+        hls.numhl == 'GitSignsChangeNr'
+        or hls.numhl == 'GitSignsDeleteNr'
+        or hls.numhl == 'GitSignsAddNr'
+        or hls.numhl == 'GitSignsChangedeleteNr'
+      then
+        ok, err = pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, -1, {
+          id = s.lnum,
+          sign_text = config.signcolumn and text or '',
+          priority = config.sign_priority,
+          sign_hl_group = hls.hl,
+          line_hl_group = config.linehl and hls.linehl or nil,
+        })
+      else
+        if should_not_add_staged_num_hl then
+          ok, err = pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, -1, {
+            id = s.lnum,
+            sign_text = config.signcolumn and text or '',
+            priority = config.sign_priority,
+            sign_hl_group = hls.hl,
+            line_hl_group = config.linehl and hls.linehl or nil,
+          })
+        else
+          ok, err = pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, -1, {
+            id = s.lnum,
+            sign_text = config.signcolumn and text or '',
+            priority = config.sign_priority,
+            sign_hl_group = hls.hl,
+            number_hl_group = config.numhl and hls.numhl or nil,
+            line_hl_group = config.linehl and hls.linehl or nil,
+          })
+        end
+      end
 
       if not ok and config.debug_mode then
         vim.schedule(function()

@@ -51,10 +51,10 @@ local function lalign(amount, text)
 end
 
 local chars = {
-  first = '┍',
+  first = '╭',
   mid = '│',
-  last = '┕',
-  single = '╺',
+  last = '╰',
+  single = '─',
 }
 
 local M = {}
@@ -94,7 +94,9 @@ local function render(blame, win, main_win, buf_sha)
     end
     last_sha = sha
   end
-
+  if lines == nil then
+    return
+  end
   local win_width = #lines[1]
   api.nvim_win_set_width(win, win_width + 1)
 
@@ -122,7 +124,7 @@ local function render(blame, win, main_win, buf_sha)
       api.nvim_buf_set_extmark(bufnr, ns, i - 1, 2, {
         end_row = i,
         end_col = 0,
-        hl_group = 'Comment',
+        hl_group = '@variable.member.lua',
       })
     end
 
@@ -139,10 +141,11 @@ local function render(blame, win, main_win, buf_sha)
         },
       })
 
-      local fillchar = string.rep(vim.opt.fillchars:get().diff or '-', 1000)
+      local fillchar = string.rep('─', 1000)
 
       api.nvim_buf_set_extmark(main_buf, ns, i - 1, 0, {
-        virt_lines = { { { fillchar, 'Comment' } } },
+        priority = 2,
+        virt_lines = { { { fillchar, 'WinSeparator' } } },
         virt_lines_leftcol = true,
       })
     end
