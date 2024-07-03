@@ -813,7 +813,9 @@ M.preview_hunk = noautocmd(function()
 end)
 
 local function clear_preview_inline(bufnr)
-  api.nvim_buf_clear_namespace(bufnr, ns_inline, 0, -1)
+  pcall(function()
+    api.nvim_buf_clear_namespace(bufnr, ns_inline, 0, -1)
+  end)
 end
 
 --- @param keys string
@@ -859,9 +861,24 @@ M.preview_hunk_inline = async.create(function()
   else
     manager.show_deleted(bufnr, ns_inline, hunk)
   end
-
+  if winid then
+    vim.keymap.set('n', 'q', function()
+      vim.cmd('close')
+    end, { buffer = vim.api.nvim_win_get_buf(winid) })
+  end
   api.nvim_create_autocmd({ 'CursorMoved', 'InsertEnter' }, {
     buffer = bufnr,
+    desc = 'Clear gitsigns inline preview',
+    callback = function()
+      if winid then
+        pcall(api.nvim_win_close, winid, true)
+      end
+      clear_preview_inline(bufnr)
+    end,
+    once = true,
+  })
+  api.nvim_create_autocmd('User', {
+    pattern = 'ESC',
     desc = 'Clear gitsigns inline preview',
     callback = function()
       if winid then
@@ -1355,7 +1372,7 @@ M.setqflist = async.create(2, function(target, opts)
     vim.fn.setqflist({}, ' ', qfopts)
     if opts.open then
       if config.trouble then
-        require('trouble').open('quickfix')
+        require('trouble').open('before_qflist')
       else
         vim.cmd.copen()
       end

@@ -380,7 +380,9 @@ function Obj.new(file, revision, encoding, gitdir, toplevel)
   -- When passing gitdir and toplevel, suppress stderr when resolving the file
   local silent = gitdir ~= nil and toplevel ~= nil
 
-  self:update(true, silent)
+  pcall(function()
+    self:update(true, silent)
+  end)
 
   return self
 end

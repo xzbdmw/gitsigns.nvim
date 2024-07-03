@@ -210,6 +210,9 @@ local function create_win(bufnr, opts, id)
   api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
     group = group_id,
     callback = function()
+      if vim.g.type_o then
+        return
+      end
       local cursor = api.nvim_win_get_cursor(0)
       -- Did the cursor REALLY change (neovim/neovim#12923)
       if

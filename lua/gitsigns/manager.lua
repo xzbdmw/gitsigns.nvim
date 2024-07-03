@@ -364,7 +364,7 @@ function M.show_deleted_in_float(bufnr, nsd, hunk, staged)
       priority = 1001,
     })
   end
-
+  vim.treesitter.start(pbufnr, vim.bo[pbufnr].filetype)
   return pwinid
 end
 

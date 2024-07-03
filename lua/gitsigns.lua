@@ -151,7 +151,9 @@ local function setup_attach()
         log.dprint('Attaching is disabled')
         return
       end
-      require('gitsigns.attach').attach(bufnr, nil, args.event)
+      vim.defer_fn(function()
+        require('gitsigns.attach').attach(bufnr, nil, args.event)
+      end, 50)
     end,
   })
 
