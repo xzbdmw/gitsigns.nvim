@@ -98,7 +98,7 @@ local function render(blame, win, main_win, buf_sha)
     return
   end
   local win_width = #lines[1]
-  api.nvim_win_set_width(win, win_width + 1)
+  api.nvim_win_set_width(win, win_width - 1)
 
   local bufnr = api.nvim_win_get_buf(win)
   local main_buf = api.nvim_win_get_buf(main_win)
