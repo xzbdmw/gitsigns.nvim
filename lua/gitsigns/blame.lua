@@ -134,21 +134,21 @@ local function render(blame, win, main_win, buf_sha)
       })
     end
 
-    if commit_lines[i] and commit_lines[i + 1] then
-      api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
-        virt_lines = {
-          { { chars.last, hash_color }, { ' ' }, { blame[i].commit.summary, 'Comment' } },
-        },
-      })
-
-      local fillchar = string.rep('─', 1000)
-
-      api.nvim_buf_set_extmark(main_buf, ns, i - 1, 0, {
-        priority = 2,
-        virt_lines = { { { fillchar, 'WinSeparator' } } },
-        virt_lines_leftcol = true,
-      })
-    end
+    -- if commit_lines[i] and commit_lines[i + 1] then
+    --   api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
+    --     virt_lines = {
+    --       { { chars.last, hash_color }, { ' ' }, { blame[i].commit.summary, '@variable' } },
+    --     },
+    --   })
+    --
+    --   local fillchar = string.rep('─', 1000)
+    --
+    --   api.nvim_buf_set_extmark(main_buf, ns, i - 1, 0, {
+    --     priority = 2,
+    --     virt_lines = { { { fillchar, 'WinSeparator' } } },
+    --     virt_lines_leftcol = true,
+    --   })
+    -- end
   end
 end
 
