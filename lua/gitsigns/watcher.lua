@@ -119,7 +119,7 @@ end
 --- - prevent updates to the same buffer from interleaving as the handler is
 ---   async.
 local watcher_handler =
-  debounce_trailing(200, async.create(1, throttle_by_id(watcher_handler0, true)), 1)
+  debounce_trailing(1, async.create(1, throttle_by_id(watcher_handler0, true)), 1)
 
 --- vim.inspect but on one line
 --- @param x any
