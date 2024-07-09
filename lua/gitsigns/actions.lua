@@ -1372,7 +1372,7 @@ M.setqflist = async.create(2, function(target, opts)
     vim.fn.setqflist({}, ' ', qfopts)
     if opts.open then
       if config.trouble then
-        require('trouble').open('before_qflist')
+        require('trouble').open('qflist')
       else
         vim.cmd.copen()
       end
