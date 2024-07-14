@@ -1287,9 +1287,15 @@ local function buildqflist(target)
     if not cache[bufnr] then
       return
     end
+    if cache[bufnr].hunks == nil then
+      error('hunks nil', 1)
+    end
     hunks_to_qflist(bufnr, cache[bufnr].hunks, qflist)
   elseif target == 'attached' then
     for bufnr, bcache in pairs(cache) do
+      if bcache.hunks == nil then
+        error('hunks nil', 1)
+      end
       hunks_to_qflist(bufnr, bcache.hunks, qflist)
     end
   elseif target == 'all' then
@@ -1314,6 +1320,9 @@ local function buildqflist(target)
           local a = r:get_show_text(':0:' .. f)
           async.scheduler()
           local hunks = run_diff(a, util.file_lines(f_abs))
+          if hunks == nil then
+            error('hunks nil', 1)
+          end
           hunks_to_qflist(f_abs, hunks, qflist)
         end
       end
@@ -1353,8 +1362,12 @@ M.setqflist = async.create(2, function(target, opts)
   if opts.open == nil then
     opts.open = true
   end
+  local ok, qfitems = pcall(buildqflist, target)
+  if not ok then
+    return
+  end
   local qfopts = {
-    items = buildqflist(target),
+    items = qfitems,
     title = 'Hunks',
   }
   async.scheduler()
