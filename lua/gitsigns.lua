@@ -153,7 +153,7 @@ local function setup_attach()
       end
       vim.defer_fn(function()
         require('gitsigns.attach').attach(bufnr, nil, args.event)
-      end, 50)
+      end, 20)
     end,
   })
 
