@@ -594,8 +594,11 @@ local function nav_hunk(direction, opts)
       api.nvim_win_set_cursor(0, { line, col })
       return
     end
-
-    line = forwards and hunks[index].added.start or hunks[index].vend
+    if direction == 'first' then
+      line = hunks[index].added.start
+    else
+      line = forwards and hunks[index].added.start or hunks[index].vend
+    end
   end
 
   -- Handle topdelete
