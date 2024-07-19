@@ -15,7 +15,7 @@ local config = require('gitsigns.config').config
 local api = vim.api
 
 local signs_normal --- @type Gitsigns.Signs
-local signs_staged --- @type Gitsigns.Signs
+Signs_staged = nil --- @type Gitsigns.Signs
 
 local M = {}
 
@@ -60,8 +60,8 @@ local function apply_win_signs(bufnr, top, bot, clear)
   local bcache = assert(cache[bufnr])
   local untracked = bcache.git_obj.object_name == nil
   apply_win_signs0(bufnr, signs_normal, bcache.hunks, top, bot, clear, untracked)
-  if signs_staged then
-    apply_win_signs0(bufnr, signs_staged, bcache.hunks_staged, top, bot, clear, false)
+  if Signs_staged then
+    apply_win_signs0(bufnr, Signs_staged, bcache.hunks_staged, top, bot, clear, false)
   end
 end
 
@@ -100,8 +100,8 @@ function M.on_lines(buf, first, last_orig, last_new)
   on_lines_blame(bcache.blame, first, last_orig, last_new)
 
   signs_normal:on_lines(buf, first, last_orig, last_new)
-  if signs_staged then
-    signs_staged:on_lines(buf, first, last_orig, last_new)
+  if Signs_staged then
+    Signs_staged:on_lines(buf, first, last_orig, last_new)
   end
 
   -- Signs in changed regions get invalidated so we need to force a redraw if
@@ -111,8 +111,8 @@ function M.on_lines(buf, first, last_orig, last_new)
     bcache.force_next_update = true
   end
 
-  if signs_staged then
-    if bcache.hunks_staged and signs_staged:contains(buf, first, last_new) then
+  if Signs_staged then
+    if bcache.hunks_staged and Signs_staged:contains(buf, first, last_new) then
       -- Force a sign redraw on the next update (fixes #521)
       bcache.force_next_update = true
     end
@@ -514,8 +514,8 @@ function M.detach(bufnr, keep_signs)
   if not keep_signs then
     -- Remove all signs
     signs_normal:remove(bufnr)
-    if signs_staged then
-      signs_staged:remove(bufnr)
+    if Signs_staged then
+      Signs_staged:remove(bufnr)
     end
   end
 end
@@ -525,8 +525,8 @@ function M.reset_signs()
   if signs_normal then
     signs_normal:reset()
   end
-  if signs_staged then
-    signs_staged:reset()
+  if Signs_staged then
+    Signs_staged:reset()
   end
 end
 
@@ -567,8 +567,8 @@ function M.setup()
   })
 
   signs_normal = Signs.new(config.signs)
-  if config.signs_staged_enable then
-    signs_staged = Signs.new(config.signs_staged, 'staged')
+  if vim.g.Base_commit == '' then
+    Signs_staged = Signs.new(config.signs_staged, 'staged')
   end
 
   M.update_debounced = debounce_trailing(config.update_debounce, async.create(1, M.update))
