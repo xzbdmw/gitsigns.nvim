@@ -47,15 +47,25 @@ end
 --- @return string[]
 function M:files_changed()
   --- @type string[]
-  local results = self:command({ 'status', '--porcelain', '--ignore-submodules' })
-
-  local ret = {} --- @type string[]
-  for _, line in ipairs(results) do
-    if line:sub(1, 2):match('^.M') then
-      ret[#ret + 1] = line:sub(4, -1)
+  local results
+  if vim.g.Base_commit ~= '' then
+    results = self:command({ 'diff', '--name-status', vim.g.Base_commit })
+    for i, result in ipairs(results) do
+      results[i] = string.gsub(result, '\t', ' ')
+      results[i] = vim.split(results[i], ' ', { plain = true })[2]
     end
+    return results
+  else
+    results = self:command({ 'status', '--porcelain', '--ignore-submodules' })
+
+    local ret = {} --- @type string[]
+    for _, line in ipairs(results) do
+      if line:sub(1, 2):match('^.M') then
+        ret[#ret + 1] = line:sub(4, -1)
+      end
+    end
+    return ret
   end
-  return ret
 end
 
 --- @param encoding string

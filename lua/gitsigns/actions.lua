@@ -1320,7 +1320,12 @@ local function buildqflist(target)
         local f_abs = r.toplevel .. '/' .. f
         local stat = vim.loop.fs_stat(f_abs)
         if stat and stat.type == 'file' then
-          local a = r:get_show_text(':0:' .. f)
+          local a
+          if vim.g.Base_commit ~= '' then
+            a = r:get_show_text(config.base .. ':' .. f)
+          else
+            a = r:get_show_text(':0:' .. f)
+          end
           async.scheduler()
           local hunks = run_diff(a, util.file_lines(f_abs))
           if hunks == nil then
