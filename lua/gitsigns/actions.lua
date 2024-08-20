@@ -869,7 +869,7 @@ M.preview_hunk_inline = async.create(function()
       vim.cmd('close')
     end, { buffer = vim.api.nvim_win_get_buf(winid) })
   end
-  api.nvim_create_autocmd({ 'CursorMoved', 'InsertEnter' }, {
+  api.nvim_create_autocmd('InsertEnter', {
     buffer = bufnr,
     desc = 'Clear gitsigns inline preview',
     callback = function()
