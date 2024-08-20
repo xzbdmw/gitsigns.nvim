@@ -380,6 +380,7 @@ M.blame = function()
     group = group,
     callback = function()
       api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+      api.nvim_del_augroup_by_id(group)
     end,
   })
 
