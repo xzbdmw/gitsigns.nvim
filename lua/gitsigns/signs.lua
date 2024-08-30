@@ -88,7 +88,7 @@ function M:add(bufnr, signs)
             end_line = s.lnum,
             hl_eol = true,
             strict = false,
-            priority = 30,
+            priority = 301,
             hl_group = config.linehl and hls.linehl or nil,
           })
         end
@@ -107,7 +107,7 @@ function M:add(bufnr, signs)
               end_line = s.lnum,
               hl_eol = true,
               strict = false,
-              priority = 30,
+              priority = 301,
               hl_group = config.linehl and hls.linehl or nil,
             })
           end
@@ -126,7 +126,7 @@ function M:add(bufnr, signs)
               end_line = s.lnum,
               hl_eol = true,
               strict = false,
-              priority = 30,
+              priority = 301,
               hl_group = config.linehl and hls.linehl or nil,
             })
           end
