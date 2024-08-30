@@ -83,6 +83,7 @@ function M:add(bufnr, signs)
         })
         if config.linehl then
           pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, 0, {
+            id = s.lnum,
             end_col = 0,
             end_line = s.lnum,
             hl_eol = true,
@@ -101,6 +102,7 @@ function M:add(bufnr, signs)
           })
           if config.linehl then
             pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, 0, {
+              id = s.lnum,
               end_col = 0,
               end_line = s.lnum,
               hl_eol = true,
@@ -119,6 +121,7 @@ function M:add(bufnr, signs)
           })
           if config.linehl then
             pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, 0, {
+              id = s.lnum,
               end_col = 0,
               end_line = s.lnum,
               hl_eol = true,
