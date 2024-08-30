@@ -78,28 +78,55 @@ function M:add(bufnr, signs)
         ok, err = pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, -1, {
           id = s.lnum,
           sign_text = config.signcolumn and text or '',
-          priority = config.sign_priority,
+          priority = 30,
           sign_hl_group = hls.hl,
-          line_hl_group = config.linehl and hls.linehl or nil,
         })
+        if config.linehl then
+          pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, 0, {
+            end_col = 0,
+            end_line = s.lnum,
+            hl_eol = true,
+            strict = false,
+            priority = 30,
+            hl_group = config.linehl and hls.linehl or nil,
+          })
+        end
       else
         if should_not_add_staged_num_hl then
           ok, err = pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, -1, {
             id = s.lnum,
             sign_text = config.signcolumn and text or '',
-            priority = config.sign_priority,
+            priority = 30,
             sign_hl_group = hls.hl,
-            line_hl_group = config.linehl and hls.linehl or nil,
           })
+          if config.linehl then
+            pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, 0, {
+              end_col = 0,
+              end_line = s.lnum,
+              hl_eol = true,
+              strict = false,
+              priority = 30,
+              hl_group = config.linehl and hls.linehl or nil,
+            })
+          end
         else
           ok, err = pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, -1, {
             id = s.lnum,
             sign_text = config.signcolumn and text or '',
-            priority = config.sign_priority,
+            priority = 30,
             sign_hl_group = hls.hl,
             number_hl_group = config.numhl and hls.numhl or nil,
-            line_hl_group = config.linehl and hls.linehl or nil,
           })
+          if config.linehl then
+            pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, 0, {
+              end_col = 0,
+              end_line = s.lnum,
+              hl_eol = true,
+              strict = false,
+              priority = 30,
+              hl_group = config.linehl and hls.linehl or nil,
+            })
+          end
         end
       end
 
