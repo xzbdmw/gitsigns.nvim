@@ -119,17 +119,6 @@ function M:add(bufnr, signs)
             sign_hl_group = hls.hl,
             number_hl_group = config.numhl and hls.numhl or nil,
           })
-          if config.linehl then
-            pcall(api.nvim_buf_set_extmark, bufnr, self.ns, s.lnum - 1, 0, {
-              id = s.lnum,
-              end_col = 0,
-              end_line = s.lnum,
-              hl_eol = true,
-              strict = false,
-              priority = 301,
-              hl_group = config.linehl and hls.linehl or nil,
-            })
-          end
         end
       end
 
