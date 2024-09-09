@@ -364,11 +364,17 @@ M.blame = function()
     group = group,
     callback = function()
       local cursor = unpack(api.nvim_win_get_cursor(blm_win))
-      local cur_sha = blame[cursor].commit.abbrev_sha
+      local function get_abbrev_sha()
+        return blame[cursor].commit.abbrev_sha
+      end
+      local ok, cur_sha = pcall(get_abbrev_sha)
+      if not ok then
+        return
+      end
       for i, info in pairs(blame) do
         if info.commit.abbrev_sha == cur_sha then
           api.nvim_buf_set_extmark(blm_bufnr, ns_hl, i - 1, 0, {
-            line_hl_group = '@markup.strong',
+            line_hl_group = 'CursorLine',
           })
         end
       end
