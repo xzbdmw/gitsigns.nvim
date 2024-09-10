@@ -321,7 +321,7 @@ function M.show_deleted_in_float(bufnr, nsd, hunk, staged)
     anchor = 'SW',
     bufpos = { hunk.added.start - bufpos_offset, 0 },
     style = 'minimal',
-    zindex = 20,
+    zindex = 21,
   })
 
   vim.w[pwinid].gitsigns_preview = true
