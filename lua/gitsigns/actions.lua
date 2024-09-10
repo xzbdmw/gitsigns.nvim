@@ -866,7 +866,9 @@ M.preview_hunk_inline = async.create(function()
   end
   if winid then
     vim.keymap.set('n', 'q', function()
-      vim.cmd('close')
+      vim.api.nvim_exec_autocmds('User', {
+        pattern = 'ESC',
+      })
     end, { buffer = vim.api.nvim_win_get_buf(winid) })
   end
   api.nvim_create_autocmd('InsertEnter', {
