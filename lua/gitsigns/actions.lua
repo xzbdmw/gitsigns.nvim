@@ -539,6 +539,9 @@ end
 --- @param greedy boolean
 --- @return Gitsigns.Hunk.Hunk[]
 local function get_nav_hunks(bufnr, target, greedy)
+  if cache[bufnr] == nil then
+    return {}
+  end
   local bcache = assert(cache[bufnr])
   local hunks_main = get_hunks(bufnr, bcache, greedy, false) or {}
 
@@ -557,6 +560,7 @@ local function get_nav_hunks(bufnr, target, greedy)
   end
   return hunks
 end
+M.get_nav_hunks = get_nav_hunks
 
 --- @async
 --- @param direction 'first'|'last'|'next'|'prev'
