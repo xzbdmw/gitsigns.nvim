@@ -387,6 +387,9 @@ M.blame = function()
     callback = function()
       api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
       api.nvim_del_augroup_by_id(group)
+      if api.nvim_win_is_valid(win) then
+        vim.wo[win].scrollbind = false
+      end
     end,
   })
 
