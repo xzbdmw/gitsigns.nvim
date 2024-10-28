@@ -367,7 +367,17 @@ function M.show_deleted_in_float(bufnr, nsd, hunk, staged)
     })
   end
   vim.b[pbufnr].gitsigns_preview = true
-  vim.treesitter.start(pbufnr, vim.bo[pbufnr].filetype)
+  local ft = vim.bo[pbufnr].filetype
+  ---@diagnostic disable-next-line: no-unknown
+  local parser_installed = require('nvim-treesitter.parsers').has_parser(ft)
+
+  if parser_installed then
+    vim.treesitter.start(pbufnr, vim.bo[pbufnr].filetype)
+  else
+    pcall(function(...)
+      vim.treesitter.start(pbufnr, vim.bo[pbufnr].filetype)
+    end)
+  end
   return pwinid
 end
 
