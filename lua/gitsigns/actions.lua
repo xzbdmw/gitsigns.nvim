@@ -851,7 +851,7 @@ end
 M.preview_hunk_inline = async.create(function()
   local bufnr = current_buf()
 
-  local hunk, staged = get_hunk_with_staged(bufnr, true)
+  local hunk, staged = get_hunk_with_staged(bufnr, false)
 
   if not hunk then
     return

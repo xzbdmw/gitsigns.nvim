@@ -132,7 +132,6 @@ function M:add(bufnr, signs)
       end
     end
   end
-  pcall(_G.indent_update)
 end
 
 ---@param bufnr integer
