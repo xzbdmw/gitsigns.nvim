@@ -252,6 +252,7 @@ function M.show_deleted(bufnr, nsd, hunk)
 
   local row = topdelete and 0 or hunk.added.start - 1
   api.nvim_buf_set_extmark(bufnr, nsd, row, -1, {
+    virt_lines_overflow = 'scroll',
     virt_lines = virt_lines,
     -- TODO(lewis6991): Note virt_lines_above doesn't work on row 0 neovim/neovim#16166
     virt_lines_above = hunk.type ~= 'delete' or topdelete,
@@ -298,6 +299,7 @@ function M.show_deleted_in_float(bufnr, nsd, hunk, staged)
 
   local row = topdelete and 0 or hunk.added.start - 1
   api.nvim_buf_set_extmark(bufnr, nsd, row, -1, {
+    virt_lines_overflow = 'scroll',
     virt_lines = virt_lines,
     -- TODO(lewis6991): Note virt_lines_above doesn't work on row 0 neovim/neovim#16166
     virt_lines_above = virt_lines_above,
